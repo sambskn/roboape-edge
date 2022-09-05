@@ -46,6 +46,8 @@ This will watch the project directory and restart as necessary. From here you ca
 
 This version of Robo Ape is deployed using [Deno Deploy](https://deno.com/deploy). In order for it to send a message to GroupMe, it needs a Bot ID token (provided in the GroupMe Dev site for the bot) and that token needs to be set as an environment variable called `BOT_ID`. Make sure to include that when configuring your deployment.
 
+> Update: I wanted Robo Ape to be able to handl requests for different groups at the same time, so I've changed how the BOT_ID works, now fetching it from a DB based on the message's group_id. You could edit your version of Robo Ape to just pull from the env var though.
+
 
 ### On the GroupMe Side
 
