@@ -1,0 +1,53 @@
+{
+    "people": [
+        {
+            "firstname": "Luke",
+            "lastname" : "Terry",
+            "id" : "123456",
+            "probability": "lucky"
+        }
+    ],
+
+    "probability_spaces": [
+        {
+            "title": "alumni",
+            "dist" : {
+                "land" : 0.25,
+                "miss": 0.7,
+                "bounceback" : 0.05
+            }
+        },
+        {
+            "title": "lucky",
+            "dist" : {
+                "land" : 0.2,
+                "miss": 0.7,
+                "bounceback" : 0.1
+            }
+        },
+        {
+            "title": "unlucky",
+            "dist" : {
+                "land" : 0.1,
+                "miss": 0.7,
+                "bounceback" : 0.2
+            }
+        },
+        {
+            "title": "fucked",
+            "dist" : {
+                "land" : 0.05,
+                "miss": 0.7,
+                "bounceback" : 0.25
+            }
+        },
+        {
+            "title": "default",
+            "dist" : {
+                "land": 0.15,
+                "miss" : 0.71,
+                "bounceback": 0.14
+            }
+        }
+    ]
+}
