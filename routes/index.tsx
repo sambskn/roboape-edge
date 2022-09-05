@@ -34,14 +34,18 @@ export default function Home({ data }: PageProps<Data> ) {
               is it comfortable here?
           </h6>
         </div>
-        <div class={tw`p-10 mt-3 w-100 text-righ flex flex-col items-end`}>
+
+        {msg !== "" && <div class={tw`p-10 mt-3 w-100 text-righ flex flex-col items-end`}>
           <h2 class={tw`mb-2 font-semibold`}>
             robo ape may respond thusly:
           </h2>
           <h6 class={tw`max-w-md p-5 text-md font-light italic font-serif ${roboResp ? '' : 'text-pink-800'} bg-gray-50 rounded border-gray-300`}>
-              {roboResp ? `"${roboResp}"` : "ROBO APE would not respond to this, out of poor mood or ignorance"}
+              {
+                roboResp ? `"${roboResp}"` : "ROBO APE would not respond to this, out of poor mood or ignorance"
+              }
           </h6>
-        </div>
+        </div>}
+        
         <div class={tw`p-10 mt-3 w-100 text-left`}>
           <form>
             <p class={tw`mb-2 font-semibold`}>

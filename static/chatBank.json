@@ -815,7 +815,9 @@
 			"keywords": [
 				"hey roboape",
 				"hey robo ape",
-				"yo roboape"
+				"yo roboape",
+        "hello robo ape",
+        "hello roboape"
 			],
 			"responses": [
 				"sup fam",
@@ -833,14 +835,15 @@
 				"ROBO APE PSA: If you don't swipe a upperclassman into the caf or provide a distraction for them to sneak in a minimum of 3 (three) times a week you will eat a handful of worms at next monday's practice",
 				"look guys the robotic ape does trick ha ha",
 				"would you say that to your grandmother",
+        "*please* ask a captain for help before using robo ape",
 				"no",
 				"yep",
 				"mhmhm",
 				"¯\\_(ツ)_/¯",
 				"toot toot the robo ape train is pulling into the station pack your bags",
 				"meta groupme humor",
-				"ask your captains if you need help",
-				"do you every think about what it would be like to have no limbs, or body, or any physical form at all?"
+				"ask your captains if you need help ;)",
+				"do you every think about what it would be like to have no limbs, or body, or any physical form at all? haha me neither"
 
 			],
 			"frequency":1,
@@ -874,8 +877,12 @@
 				"jpn"
 			],
 			"responses": [
-				"come out to JPN and play your favorite alumni oct. 5-6th",
-				"back in my day JPN stood for joe's porn network"
+				"come out to JPN and play your favorite alumni oct. 22-23th (alledgedly)",
+        "robo ape jpn pro tip: captains are looking for players at jpn who aren't afraid to throw a hammer early-stall",
+        "robo ape jpn pro tip: bring your parents ;)",
+        "robo ape jpn pro tip: do NOT talk to my wife at JPN",
+				"back in my day JPN stood for joe's porn network",
+        "some schools wont come to jpn because they heard it stands for just playing nickelback"
 			],
 			"frequency":0.3,
 			"special": null
