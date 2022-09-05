@@ -66,6 +66,6 @@ function postBotMessage(message: string, botId: string) {
 }
 
 function templateIncludesText(text: string, template: Template) {
-    const keywordMatch = template.keywords.find(keyword => keyword.toLowerCase().includes(text.toLowerCase()));
+    const keywordMatch = template.keywords.find(keyword => text.toLowerCase().includes(keyword.toLowerCase()));
     return !!keywordMatch;
 }
