@@ -40,6 +40,8 @@ export const handler: Handlers = {
 }
 
 export function getResponseForMessage(msg: string): string | undefined {
+    if (msg === "") return undefined
+    
     const matchingTemplate = chatBank.templates.find(template => templateIncludesText(msg, template))
     // if we foudn a matching template and our random number is under the frequency threshold, go ahead
     if (matchingTemplate && Math.random() <= matchingTemplate.frequency) {
