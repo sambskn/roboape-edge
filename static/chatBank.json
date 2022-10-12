@@ -62,7 +62,7 @@
 
 			],
 			"frequency":1.0,
-			"special": null
+			"special": "roll"
 		},
 		{
 			"keywords": [
