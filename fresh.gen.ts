@@ -4,13 +4,15 @@
 
 import * as $0 from "./routes/_app.tsx";
 import * as $1 from "./routes/api/gmCallback.tsx";
-import * as $2 from "./routes/index.tsx";
+import * as $2 from "./routes/api/roll.tsx";
+import * as $3 from "./routes/index.tsx";
 
 const manifest = {
   routes: {
     "./routes/_app.tsx": $0,
     "./routes/api/gmCallback.tsx": $1,
-    "./routes/index.tsx": $2,
+    "./routes/api/roll.tsx": $2,
+    "./routes/index.tsx": $3,
   },
   islands: {},
   baseUrl: import.meta.url,

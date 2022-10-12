@@ -2,6 +2,7 @@ import { Handlers } from "$fresh/server.ts";
 import chatBank from "../../static/chatBank.json" assert { type: "json" } 
 import { GroupmeCallback } from "../../types/groupmeCallback.ts";
 import Template from "../../types/template.ts";
+import { getRandomProbability } from "../../utils/random.ts";
 import { specialRoll } from "./roll.tsx";
 
 // Change this to your bot's name (exactly) if you're making a copy
@@ -45,13 +46,13 @@ export function getResponseForMessage(msg: GroupmeCallback): string | undefined 
     
     const matchingTemplate = chatBank.templates.find(template => templateIncludesText(msg.text, template))
     // if we found a matching template and our random number is under the frequency threshold, go ahead
-    if (matchingTemplate && Math.random() <= matchingTemplate.frequency) {
+    if (matchingTemplate && getRandomProbability() <= matchingTemplate.frequency) {
         // TODO: Handle 'special' case responses is the template has any
         if (matchingTemplate.special){
             return specialResponse(matchingTemplate.special, msg);
         }else{
         // Randomly select response from responses
-        return matchingTemplate?.responses[Math.floor(Math.random() * matchingTemplate.responses.length)];
+        return matchingTemplate?.responses[Math.floor(getRandomProbability() * matchingTemplate.responses.length)];
         }
     } 
     // if we didn't find one, or freq didn't hit, return nothing

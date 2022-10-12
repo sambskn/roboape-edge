@@ -3,7 +3,7 @@ import { h } from "preact";
 import { tw } from "@twind";
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { getResponseForMessage } from "./api/gmCallback.tsx";
-import { groupmeCallback } from "../types/groupmeCallback.ts"
+import { GroupmeCallback } from "../types/groupmeCallback.ts"
 
 interface Data {
   roboResp: string | undefined;
@@ -18,25 +18,24 @@ export const handler: Handlers<Data> = {
     const acctId = url.searchParams.get("account") || "";
 
     // simulate robo ape response using same function (without posting)
-    var messageObj: groupmeCallback;
-    messageObj = {
+    const messageObj: GroupmeCallback = {
       attachments: [],
       avatar_url: "",
-      created_at: "",
+      created_at: 0,
       group_id: "",
       id: "",
       name: "",
       sender_id: acctId,
       sender_type: "",
       source_guid: "",
-      system: "",
+      system: false,
       text: msg,
       user_id: ""
     }
 
     const roboResp = getResponseForMessage(messageObj);
 
-    return ctx.render({ roboResp, msg });
+    return ctx.render({ roboResp, msg, acctId });
   }
 }
 
@@ -54,6 +53,33 @@ export default function Home({ data }: PageProps<Data>) {
           </h6>
         </div>
 
+        
+
+        <div class={tw`p-10 mt-3 w-100 text-left`}>
+          <form>
+            <div class={tw`flex flex-row`}>
+              <div class={tw`flex flex-col`}>
+                <p class={tw`mb-2 font-semibold`}>
+                  enter your test message:
+                </p>
+                <input type="text" name="msg" value={msg} class={tw`p-2 rounded border mr-3`} />
+                <p class={tw`my-2 italic`}>
+                  set your chances (for rolls)
+                </p>
+                <select name="account" value={acctId} class={tw`p-2 bg-blue-800 rounded text-white`}>
+                  <option value="default">default 🦍</option>
+                  <option value="123456">luke 💁‍♂️</option>
+                  <option value="unlucky">unlucky 😢</option>
+                  <option value="lucky">lucky 😏</option>
+                  <option value="fucked">fucked 🥴</option>
+                  <option value="alumni">alumni 🧓</option>
+                </select>
+                <button type="submit" class={tw`p-2 my-4 h-12 bg-indigo-300 rounded`}>see what ape say</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
         {msg !== "" && <div class={tw`p-10 mt-3 w-100 text-righ flex flex-col items-end`}>
           <h2 class={tw`mb-2 font-semibold`}>
             robo ape may respond thusly:
@@ -64,22 +90,6 @@ export default function Home({ data }: PageProps<Data>) {
             }
           </h6>
         </div>}
-
-        <div class={tw`p-10 mt-3 w-100 text-left`}>
-          <form>
-            <p class={tw`mb-2 font-semibold`}>
-              enter your test message:
-            </p>
-            <input type="text" name="msg" value={msg} class={tw`p-2 rounded border mr-3`} />
-            <button type="submit" class={tw`p-2 bg-gray-300 rounded`}>see what ape say</button>
-            <select name="account" value={acctId} class={tw`p-2 bg-blue-800 rounded text-white`}>
-              <option value="default">rando</option>
-              <option value="123456">luke</option>
-              <option value="sonny">sonny</option>
-            </select>
-          </form>
-
-        </div>
 
       </div>
       <footer class={tw`text-center text-purple-800 underline `}>

@@ -1,7 +1,11 @@
 import { GroupmeCallback } from "../../types/groupmeCallback.ts";
 import probabilities from "../../static/rollProbabilities.json" assert { type: "json" } 
-import chatBank from "../../static/chatBank.json" assert {type: "json"}
-import {templateIncludesText} from "../api/gmCallback.tsx"
+import { getRandomProbability } from "../../utils/random.ts";
+
+// the strign values that will be used as the faces of the die
+// randomly selected from when doing a defualt roll
+export const ROLL_OPTIONS =  ["1", "2", "3", "4", "4", "5", "6", "20"]
+export const NORMAL_ROLL_OPTIONS = ROLL_OPTIONS.filter(o => o !== "20")
 
 /**
  * implements a rigged roll based on the person who sent the roll request to the groupme
@@ -13,46 +17,52 @@ export function specialRoll(message : GroupmeCallback): string {
     const sender = probabilities.people.find(sender => sender.id == message.sender_id)
 
     // if the person was found, use their probability space, otherwise do a normal roll
-    if (sender){
-        var probability = sender.probability;
-    }else{
-        // the person was not found
-        var probability = "default";
+    const probability = sender ? sender.probability : "default";
+    
+    const rollRegex = /^on a (\d|20|one|two|three|four|five|six|twenty)/gmi
+    // splits the message text into the number they want and the dare text (maybe we could save them for posterity/judgement? or get @'s from it and use them in determining probability?)
+    let [desiredNumber, dareText] = message.text.toLowerCase().split(rollRegex).slice(1,3);
+    
+    // convert the number to a number string (instead of 'five' we want '5')
+    if (isNaN(parseInt(desiredNumber))) {
+        switch (desiredNumber) {
+            case'one':
+                desiredNumber = '1'
+                break;
+            case 'two':
+                desiredNumber = '2'
+                break;
+            case 'three':
+                desiredNumber = '3'
+                break;
+            case 'four':
+                desiredNumber = '4'
+                break;
+            case 'five':
+                desiredNumber = '5'
+                break;
+            case 'six':
+                desiredNumber = '6'
+                break;
+            case 'twenty':
+                desiredNumber = '20'
+                break;
+            default:
+                break;
+        }
     }
 
-    // to do the roll, we need to figure out which number they were attempting to land (if possible)
-    // find the keyword that was triggered and extract the landing number from there
-
-    // find the keyword
-    const matchingTemplate = chatBank.templates.find(template => templateIncludesText(message.text, template));
-    const keywordMatch = matchingTemplate ? matchingTemplate.keywords.find(keyword => message.text.toLowerCase().includes(keyword.toLowerCase())) : "";
-
-    // extract the landing number
-    const key = {
-        "on a 1": 1,
-        "on a one": 1,
-        "on a 2": 2,
-        "on a two": 2,
-        "on a 3": 3,
-        "on a three": 3,
-        "on a 4": 4,
-        "on a four": 4,
-        "on a 5": 5,
-        "on a five": 5,
-        "on a 6": 6,
-        "on a six": 6
-    }    
-    const landingNumber = keywordMatch ? key[keywordMatch] : undefined;
-
+    
+    console.log(`Roll incoming: Looking for a ${desiredNumber} -- Dare: ${dareText}`)
     // if there's no landing number, just do the roll like normal
-    if (!landingNumber) return ["1", "2", "3", "4", "4", "5", "6", "20"][Math.floor(Math.random() * 7)];
+    if (!desiredNumber) return getDefaultRoll();
 
     // decide if the roll lands, doesn't, or bounces back
-    var space = probabilities.probability_spaces.find(space => space.title == probability)
-    var outcome = "undecided";
+    const space = probabilities.probability_spaces.find(space => space.title == probability)
+    let outcome = "undecided";
     if (space){
         const totalSpace = space.dist.bounceback + space.dist.land + space.dist.miss
-        var rollFactor = Math.random() * totalSpace
+        const rollFactor = getRandomProbability() * totalSpace
 
         if (rollFactor < space.dist.bounceback){
             outcome = "bounceback";
@@ -62,16 +72,23 @@ export function specialRoll(message : GroupmeCallback): string {
             outcome = "miss";
         }
 
+        console.log(`roll outcome: ${outcome}`)
+
         switch (outcome){
             case "bounceback":
                 return "20";
             case "land":
-                return landingNumber;
+                return desiredNumber;
             case "miss":
-                return ["1", "2", "3", "4", "5", "6"].filter(num => num != landingNumber)[Math.floor(Math.random() * 5)];
+                return NORMAL_ROLL_OPTIONS.filter(num => num != desiredNumber)[Math.floor(getRandomProbability() * (NORMAL_ROLL_OPTIONS.length -1))];
         }
-    }else{
-        // if for some reason, somebody is listed with a probability that doesn't exist, do a normal roll.
-        return ["1", "2", "3", "4", "4", "5", "6", "20"][Math.floor(Math.random() * 7)];
     }
+    
+    // if for some reason, somebody is listed with a probability that doesn't exist, do a normal roll.
+    return getDefaultRoll();
+    
+}
+
+const getDefaultRoll = (): string => {
+    return ROLL_OPTIONS[Math.floor(getRandomProbability() * ROLL_OPTIONS.length)]
 }
