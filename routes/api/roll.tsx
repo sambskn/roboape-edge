@@ -80,7 +80,8 @@ export function specialRoll(message : GroupmeCallback): string {
             case "land":
                 return desiredNumber;
             case "miss":
-                return NORMAL_ROLL_OPTIONS.filter(num => num != desiredNumber)[Math.floor(getRandomProbability() * (NORMAL_ROLL_OPTIONS.length -1))];
+                const MISSES = NORMAL_ROLL_OPTIONS.filter(num => num != desiredNumber);
+                return MISSES[Math.floor(getRandomProbability() * (MISSES.length - 1))];
         }
     }
     
@@ -90,5 +91,5 @@ export function specialRoll(message : GroupmeCallback): string {
 }
 
 const getDefaultRoll = (): string => {
-    return ROLL_OPTIONS[Math.floor(getRandomProbability() * ROLL_OPTIONS.length)]
+    return ROLL_OPTIONS[Math.floor(getRandomProbability() * ROLL_OPTIONS.length)];
 }
