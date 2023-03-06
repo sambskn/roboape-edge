@@ -1068,6 +1068,23 @@
 			],
 			"frequency":0.5,
 			"special": null
+		},
+		{
+			"keywords": [
+				"Big Event",
+				"big event",
+				"big Event",
+				"Big event"
+			],
+			"responses": [
+				"the only big event i have to look forward to is my court hearing",
+				"!!! BIGGER EVENT: robo ape fits 3 whole lemons in his mouth",
+				"the event is TOO BIG. IT HURTS",
+				"can i wear my banana hammock?",
+				"i hope BIG stands for back in the gym ᕦ(ò_óˇ)ᕤ touch my inner thigh thats alllll squats"
+			],
+			"frequency":0.6,
+			"special": null
 		}
 	]
 }
