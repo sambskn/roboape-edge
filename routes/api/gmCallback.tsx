@@ -30,7 +30,7 @@ export const handler: Handlers = {
 
         // check to make sure the bot is not responding to itself
         if (reqBody.name !== BOT_NAME) {
-            var response = getResponseForMessage(reqBody);
+            const response = getResponseForMessage(reqBody);
             if (response) {
                 const botID = await getBotIdForMessage(reqBody);
                 // Post to groupme
