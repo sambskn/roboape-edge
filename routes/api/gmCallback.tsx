@@ -5,6 +5,7 @@ import Template from "../../types/template.ts";
 import * as postgres from "https://deno.land/x/postgres@v0.14.0/mod.ts";
 import { getRandomProbability } from "../../utils/random.ts";
 import { specialRoll } from "./roll.tsx";
+import { RoboResponse } from "../../types/roboResponse.ts";
 
 // Change this to your bot's name (exactly) if you're making a copy
 export const BOT_NAME = "ROBO APE";
@@ -29,8 +30,8 @@ export const handler: Handlers = {
 
         // check to make sure the bot is not responding to itself
         if (reqBody.name !== BOT_NAME) {
-            const message = getResponseForMessage(reqBody);
-            if (message) {
+            var response = getResponseForMessage(reqBody);
+            if (response) {
                 const botID = await getBotIdForMessage(reqBody);
                 // Post to groupme
                 if (!botID) {
@@ -38,7 +39,7 @@ export const handler: Handlers = {
                 }
                 // Go ahead and post message to group using provided bot ID
                 try {
-                    await postBotMessage(message, botID);
+                    await postBotMessage(response, botID);
                 } catch (error) {
                     throw new Error("Failure while trying to post to GroupMe")
                 }
@@ -51,7 +52,7 @@ export const handler: Handlers = {
     }
 }
 
-export function getResponseForMessage(msg: GroupmeCallback): string | undefined {
+export function getResponseForMessage(msg: GroupmeCallback): RoboResponse | undefined {
     if (msg.text === "") return undefined
     
     const matchingTemplate = chatBank.templates.find(template => templateIncludesText(msg.text, template))
@@ -62,14 +63,18 @@ export function getResponseForMessage(msg: GroupmeCallback): string | undefined 
             return specialResponse(matchingTemplate.special, msg);
         }else{
         // Randomly select response from responses
-        return matchingTemplate?.responses[Math.floor(getRandomProbability() * matchingTemplate.responses.length)];
+        const response: RoboResponse = {
+            message: matchingTemplate?.responses[Math.floor(getRandomProbability() * matchingTemplate.responses.length)],
+            attachments: ""
+        } 
+        return response;
         }
     } 
     // if we didn't find one, or freq didn't hit, return nothing
     return undefined;
 }
 
-function specialResponse(specialIndicator: string, message: GroupmeCallback): string | undefined {
+function specialResponse(specialIndicator: string, message: GroupmeCallback): RoboResponse | undefined {
     // this function is meant to interpret the special responses and return whatever the custom functions want to
     switch (specialIndicator){
         case "roll":
@@ -79,12 +84,13 @@ function specialResponse(specialIndicator: string, message: GroupmeCallback): st
     }
 }
 
-function postBotMessage(message: string, botId: string) {
+function postBotMessage(response: RoboResponse, botId: string) {
     return fetch('https://api.groupme.com/v3/bots/post',{
         method: "POST",
         body: JSON.stringify({
             bot_id: botId,
-            text: message
+            text: response.message,
+            attachments: response.attachments
         }),
         headers: { "Content-Type": "application/json" }
     })

@@ -1,6 +1,7 @@
 import { GroupmeCallback } from "../../types/groupmeCallback.ts";
 import probabilities from "../../static/rollProbabilities.json" assert { type: "json" } 
 import { getRandomProbability } from "../../utils/random.ts";
+import { RoboResponse } from "../../types/roboResponse.ts";
 
 // the strign values that will be used as the faces of the die
 // randomly selected from when doing a defualt roll
@@ -12,7 +13,7 @@ export const NORMAL_ROLL_OPTIONS = ROLL_OPTIONS.filter(o => o !== "20")
  * 
  * @param message - the GroupmeCallback object which encapsulates the message and the sender, among other things
  */
-export function specialRoll(message : GroupmeCallback): string {
+export function specialRoll(message : GroupmeCallback): RoboResponse {
     // attempt to find the sender in the people listed
     const sender = probabilities.people.find(sender => sender.id == message.sender_id)
 
@@ -52,10 +53,28 @@ export function specialRoll(message : GroupmeCallback): string {
         }
     }
 
-    
+    // Setup the repsonse object with a mention of the user who rolled.
+    // Not sure if mentions are documented in GroupMe's API, but I found this old thread: https://groups.google.com/g/groupme-api-support/c/mNyIZB_S1jc
+    const mention = `@${message.name}`;
+    const response: RoboResponse = {
+        message: "",
+        attachments: [
+            {
+                "type": "mentions",
+                "user_ids": [message.sender_id],
+                "loci": [
+                    [0, mention.length]
+                ]
+            }
+        ]
+    };
+
     console.log(`Roll incoming: Looking for a ${desiredNumber} -- Dare: ${dareText}`)
     // if there's no landing number, just do the roll like normal
-    if (!desiredNumber) return getDefaultRoll();
+    if (!desiredNumber) {
+        response.message = mention + ` ${getDefaultRoll()}`;
+        return response;
+    }
 
     // decide if the roll lands, doesn't, or bounces back
     const space = probabilities.probability_spaces.find(space => space.title == probability)
@@ -74,19 +93,24 @@ export function specialRoll(message : GroupmeCallback): string {
 
         console.log(`roll outcome: ${outcome}`)
 
+        let strBase = `${mention} `;
         switch (outcome){
             case "bounceback":
-                return "20";
+                response.message = strBase + "20";
+                return response;
             case "land":
-                return desiredNumber;
+                response.message = strBase + desiredNumber;
+                return response;
             case "miss":
                 const MISSES = NORMAL_ROLL_OPTIONS.filter(num => num != desiredNumber);
-                return MISSES[Math.floor(getRandomProbability() * (MISSES.length - 1))];
+                response.message = strBase + MISSES[Math.floor(getRandomProbability() * (MISSES.length - 1))];
+                return response;
         }
     }
     
     // if for some reason, somebody is listed with a probability that doesn't exist, do a normal roll.
-    return getDefaultRoll();
+    response.message = `${mention} ${getDefaultRoll()}`;
+    return response;
     
 }
 
