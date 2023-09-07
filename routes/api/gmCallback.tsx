@@ -65,7 +65,7 @@ export function getResponseForMessage(msg: GroupmeCallback): RoboResponse | unde
         // Randomly select response from responses
         const response: RoboResponse = {
             message: matchingTemplate?.responses[Math.floor(getRandomProbability() * matchingTemplate.responses.length)],
-            attachments: ""
+            attachments: []
         } 
         return response;
         }
