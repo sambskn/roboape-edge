@@ -24,7 +24,7 @@ export const handler: Handlers<Data> = {
       created_at: 0,
       group_id: "",
       id: "",
-      name: "",
+      name: "Robert",
       sender_id: acctId,
       sender_type: "",
       source_guid: "",
@@ -86,7 +86,7 @@ export default function Home({ data }: PageProps<Data>) {
           </h2>
           <h6 class={tw`max-w-md p-5 text-md font-light italic font-serif ${roboResp ? '' : 'text-pink-800'} bg-gray-50 rounded border-gray-300`}>
             {
-              roboResp ? `"${roboResp}"` : "ROBO APE would not respond to this, out of poor mood or ignorance"
+              roboResp ? `"${roboResp.message}"` : "ROBO APE would not respond to this, out of poor mood or ignorance"
             }
           </h6>
         </div>}
