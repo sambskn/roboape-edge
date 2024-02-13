@@ -2,26 +2,16 @@ import { Handlers } from "$fresh/server.ts";
 import chatBank from "../../static/chatBank.json" assert { type: "json" } 
 import { GroupmeCallback } from "../../types/groupmeCallback.ts";
 import Template from "../../types/template.ts";
-import postgres from "https://deno.land/x/postgresjs@v3.4.3/mod.js"
 import { getRandomProbability } from "../../utils/random.ts";
 import { specialRoll } from "./roll.tsx";
 import { RoboResponse } from "../../types/roboResponse.ts";
+import { getBotIdForGroup } from "../../utils/groupBotIds.ts"
 
 // Change this to your bot's name (exactly) if you're making a copy
 export const BOT_NAME = "ROBO APE";
 
-export interface groupme_group {
-    id: number;
-    created_at: string;
-    group_id: string;
-    bot_id: string;
-    name: string;
-    chatbank_id: number;
-}
-
 export const handler: Handlers = {
     async POST(req, ctx): Promise<Response> {
-
         // in theory we could check here to make sure the request comes from GroupMe,
         // that way no bad actors can spam our API and get us to post to the GroupMe
         // ... we'll just call it a TODO for now
@@ -32,7 +22,7 @@ export const handler: Handlers = {
         if (reqBody.name !== BOT_NAME) {
             const response = getResponseForMessage(reqBody);
             if (response) {
-                const botID = await getBotIdForMessage(reqBody);
+                const botID = getBotIdForGroup(parseInt(reqBody.group_id))
                 // Post to groupme
                 if (!botID) {
                     throw new Error("No Bot ID provided")
@@ -85,7 +75,7 @@ function specialResponse(specialIndicator: string, message: GroupmeCallback): Ro
 }
 
 function postBotMessage(response: RoboResponse, botId: string) {
-    console.log(`Posting message to group: ${response}`);
+    console.log(`Posting message to group: ${JSON.stringify(response)}`);
     return fetch('https://api.groupme.com/v3/bots/post',{
         method: "POST",
         body: JSON.stringify({
@@ -100,29 +90,4 @@ function postBotMessage(response: RoboResponse, botId: string) {
 export function templateIncludesText(text: string, template: Template) {
     const keywordMatch = template.keywords.find(keyword => text.toLowerCase().includes(keyword.toLowerCase()));
     return !!keywordMatch;
-}
-
-async function getBotIdForMessage(message: GroupmeCallback) {
-    // Get the connection string from the environment variable "DATABASE_URL"
-    const databaseUrl = Deno.env.get("DATABASE_URL");
-    if (!databaseUrl) {
-        throw Error("No Database Connection URI in env var")
-    }
-    console.log("Checking DB for bot id to use...")
-    // Create a database client
-    const db = postgres(databaseUrl)
-    try {
-        // find the group associated with the group_id on the message
-        const result = await db`
-            SELECT * FROM groupme_groups g WHERE g.group_id = ${message.group_id} 
-        `
-        const group = result[0]
-        if (group.bot_id) {
-            return group.bot_id
-        }
-        throw Error(`No bot id found in database for group id: ${message.group_id}`)
-    }  catch (err) {
-        console.error(err);
-        throw new Error('Database issue')
-    } 
 }
