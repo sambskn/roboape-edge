@@ -44,7 +44,7 @@ This will watch the project directory and restart as necessary. From here you ca
 
 # Deployment
 
-This version of Robo Ape is deployed using [Deno Deploy](https://deno.com/deploy). In order for it to send a message to GroupMe, it needs a Bot ID token (provided in the GroupMe Dev site for the bot). It grabs that Bot ID to use based on the incoming message's group ID. Check `utils/groupBotIds.ts` and update that file with the group/bot id's you want. (oof those should probably be secret now that i think about it)
+This version of Robo Ape is deployed using [Deno Deploy](https://deno.com/deploy). In order for it to send a message to GroupMe, it needs a Bot ID token (provided in the GroupMe Dev site for the bot). It grabs that Bot ID to use based on the incoming message's group ID. Set environment variables for each group the bot is configured to respond to in the format `GROUP_ID_<your group id here>=<your bot id for that group here>`
 
 
 ### On the GroupMe Side
