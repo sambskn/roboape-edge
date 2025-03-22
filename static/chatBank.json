@@ -889,8 +889,7 @@
 		},
 		{
 			"keywords": [
-				"matt",
-				"allan"
+				"matt allan"
 			],
 			"responses": [
 				"matt allan is proof that frisbee is a frat",
@@ -1085,6 +1084,63 @@
 			],
 			"frequency":0.6,
 			"special": null
+		},
+		{
+			"keywords": [
+				"smith",
+				"matt smith"
+			],
+			"responses": [
+				"did u know matt smith was a captain!?",
+				"matt smith never megged me\nNOBODY MEGS ROBO APE",
+				"do u know what being megged is?\nmatt smith will teach u",
+				"some say the ghost of matt smith still haunts the IM fields.\nif you leave a cube of busch and an ultrastar next to your door\nhe'll spare your soul"
+			],
+			"frequency": 0.3,
+			"special": null
+		},
+		{
+			"keywords": [
+				"tickets"
+			],
+			"responses": [
+				"robo ape protip: always buy your tickets from strangers who just joined the groupme",
+				"robo ape smells a bot\nthere can be only one\n┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻",
+				"selling OU football season tickets\naccepting apecoin only\nDM robo ape if ur interested"
+			],
+			"frequency": 1,
+			"special": null
+		},
+		{
+			"keywords": [
+				"rizz",
+				"rizzler",
+				"skibidi",
+				"toilet"
+			],
+			"responses": [
+				"my circuits measure copius amounts of skibidi rizz from you\nrobo ape scientists have never seen numbers this bad\nwe need to run some tests",
+				"skibidi... rizz...\nrobo doesn't know these words",
+				"gen alpha did not experience slenderman"
+			],
+			"frequency": 0.3,
+			"special": null
+		},
+		{
+			"keywords": [
+				"track",
+				"song",
+				"spotify"
+			],
+			"responses": [
+				"yoooo, Jeff! when is our collab happening?",
+				"this track is FIRE",
+				"i liked old zreaux better",
+				"bring the speaker to practice. new zreaux track just dropped"
+			],
+			"frequency": 0.7,
+			"special": null
 		}
 	]
 }
+
